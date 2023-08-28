@@ -1,7 +1,7 @@
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs"
 import { revalidatePath } from "next/cache"
 import { cookies } from "next/headers"
-import { type Database } from "@/types/database"
+import { type Database } from "@/app/types/database"
 
 export function NewTweet (){
 

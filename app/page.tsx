@@ -31,7 +31,6 @@ export default async function Home() {
 
   return (
     <main>
-      {/* @ts-expect-error Server Component */}
       <AuthButtonServer />
       <NewTweet />
       <Tweets tweets={tweets} />

@@ -1,29 +1,28 @@
 import { createServerComponentClient } from '@supabase/auth-helpers-nextjs'
-import { cookies } from 'next/headers';
+import { cookies } from 'next/headers'
 import { AuthButtonServer } from './auth-button-server'
-import { redirect } from 'next/navigation';
-import { NewTweet } from './new-tweet';
-import { Tweets } from './tweets';
+import { redirect } from 'next/navigation'
+import { NewTweet } from './new-tweet'
+import { Tweets } from './tweets'
 
+export default async function Home () {
+  const supabase = createServerComponentClient<Database>({ cookies })
 
-export default async function Home() {
-  const supabase = createServerComponentClient<Database>({ cookies });
+  const { data: { session } } = await supabase.auth.getSession() // s.data.session
 
-  let { data: { session } } = await supabase.auth.getSession()  // s.data.session
-
-  if (!session) { redirect('/login') }
+  if (session == null) { redirect('/login') }
 
   const { data } = await supabase
-    .from("tweets")
-    .select("*, author: profiles(*), likes(user_id)");
+    .from('tweets')
+    .select('*, author: profiles(*), likes(user_id)')
 
   const tweets = data?.map(tweet => ({
     ...tweet,
     author: Array.isArray(tweet.author) ? tweet.author[0] : tweet.author,
-    user_has_liked_tweet: tweet.likes.find(item => item.user_id === session?.user.id),
-    likes: tweet.likes.length   
+    user_has_liked_tweet: Boolean(tweet.likes.find(item => item.user_id === session?.user.id)),
+    likes: tweet.likes.length
   })) ?? []
- 
+
   //  tweets?.forEach(element => {
   //    console.log(element.likes)
   //  });

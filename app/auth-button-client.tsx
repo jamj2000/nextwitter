@@ -11,7 +11,7 @@ export function AuthButtonClient ({ session }: { session: Session | null }) {
   async function handleSingIn () {
     await supabase.auth.signInWithOAuth({
       provider: 'github',
-      options: { redirectTo: 'http://localhost:3000/auth/callback' }
+      options: { redirectTo: 'https://nextwitter-chi.vercel.app/auth/callback' }
     })
   }
   async function handleSingOut () {
